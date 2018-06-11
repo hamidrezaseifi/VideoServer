@@ -1,0 +1,263 @@
+@charset "ISO-8859-1";
+
+html{
+	height: 100%;	
+}
+
+body
+{
+	padding: 10px;
+	height: 100%;	
+}
+
+.main-container{
+	border:solid 1px gray; 
+	border-radius: 5px; 
+	margin-bottom: 20px;
+}
+
+.content-container{
+	height: calc(100vh - 110px);
+	padding: 10px;
+}
+
+ul.nav-tabs li:not(.active) a
+{
+	background:#e1eeff;
+}
+
+div.folderparent
+{
+	padding: 10px;
+	background: #eeeeee;
+}
+
+ul.folderparent
+{
+	list-style-type: none;
+	background: #9f0000!important;
+	padding:8px;
+	margin-left:0;
+	
+}
+
+ul.folderparent li.folderitem
+{
+	height: 30px;
+	background: #333333 !important;
+	color: #ffffaa !important;
+	padding: 3px;
+	padding-left: 6px;
+	margin-bottom: 2px;
+	margin-left:0;
+	cursor: pointer;
+}
+
+div.folderparent div.filefoldercontainer
+{
+	float: left;
+}
+
+div.folderitemsparent
+{
+	width: 200px;
+	background: #9f0000!important;
+	height: 600px;
+	margin-left: 5px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 5px;
+}
+
+div.fileitemsparent
+{
+	width: calc(100vw - 290px);
+	background: #0f5b30!important;
+	height: 600px;
+	margin-left: 5px;
+	margin-right: 5px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	padding: 10px;
+	overflow-y: auto;
+}
+
+div.fileitem
+{
+	margin-bottom: 5px; 
+	border: 1px solid gray; 
+	padding: 4px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 3px;
+	font-weight: bold;
+}
+
+div.fileitem[class*="ready"] {
+    background: #8fd6a6!important;
+}
+
+div.fileitem[class*="done"] {
+    background: #afc6f6!important;
+}
+
+a.fileitembutton
+{
+	background-color: #EEEEEE;
+    color: black;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border: 1px solid gray;
+    font-family: Arial;
+    font-weight: bold;
+    border-radius: 4px;
+	margin-left: 10px;
+}
+
+a.fileitembutton:hover, a.fileitembutton:active
+{
+	background-color: #FAEAEE;
+}
+
+div.loadingover
+{
+	position: absolute;
+	left:0;
+	top:0;
+	width:100vw;
+	height:100vh;	
+	background: url(../images/loading2.gif);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100px 100px;
+	background-color: rgba(190, 190, 190, 0.5);
+}
+
+
+div.processparent
+{
+	padding: 10px;
+	background: #eeeeee;
+}
+
+
+div.processitemsparent
+{
+	width: calc(100vw - 40px);
+	background: #0f5b30!important;
+	height: calc(100vh - 150px);
+	margin-left: 5px;
+	margin-right: 5px;
+	border-radius: 10px;
+	padding: 10px;
+	overflow-y: auto;
+}
+
+div.pathsubitemsparent
+{
+	width: calc(100vw - 80px);
+	background: #0f5b30!important;
+	padding-bottom: 50px;
+	margin-left: 5px;
+	margin-right: 5px;
+	border-radius: 10px;
+	padding: 10px;
+	overflow-y: auto;
+}
+
+div.processitems
+{
+	margin-bottom: 5px; 
+	border: 1px solid gray; 
+	padding: 4px;
+	padding-left: 10px;
+	padding-right: 10px;
+	background: #8fd6a6!important;
+	border-radius: 3px;
+	font-weight: bold;
+}
+
+div.processitems span
+{
+	margin-left: 15px;
+	border-left: solid gray 1px;
+	padding-left: 10px;
+}
+
+
+div.subtitleitemsparent
+{
+	width: calc(100vw - 290px);
+	background: #0f5b30!important;
+	height: 600px;
+	margin-left: 5px;
+	margin-right: 5px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	padding: 10px;
+	overflow-y: auto;
+}
+
+
+.md-dialog-content
+{
+	width: 700px; 	
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) 
+{
+    background-color: #0f5b30!important;
+    color: rgba(255,255,255,0.87);
+}
+
+md-dialog.md-default-theme, md-dialog {
+    border-radius: 4px;
+    background-color: rgb(155,255,195);
+    color: rgba(0,0,0,0.87);
+}
+
+md-progress-linear .md-container
+{
+	height: 100% !important;
+}
+
+md-progress-linear
+{
+	width:150px !important; 
+	display: inline-block !important; 
+	height: 20px !important;
+	margin-left: 10px !important;
+}
+md-progress-linear .md-container .md-bar
+{
+	height: 100% !important;
+}
+
+.btn-group
+{
+	width: 80%;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    padding: 5px;
+    background-color: darkgreen;
+}
+
+
+div.pathsubitems
+{
+	margin-bottom: 5px; 
+	border: 1px solid gray; 
+	padding: 4px;
+	padding-left: 10px;
+	padding-right: 10px;
+	background: #8fd6a6!important;
+	border-radius: 3px;
+	font-weight: bold;
+}
+
+div.pathsubitems button
+{
+	margin-left: 15px;
+}
