@@ -19,7 +19,7 @@ brainApp.controller('GeneralController', ['$scope', '$http', '$sce', '$element',
 		$scope.loadFiles = function(id) {
 	        
 			$scope.$parent.showloading = true;
-	        $http.get("/jvideo/filelist/" + id).then(function(response) {
+	        $http.get("/filelist/" + id).then(function(response) {
 	        	
 	        	var parent = angular.element(document.querySelector('.fileitemsparent'));
 	        	parent.html("");
@@ -60,7 +60,7 @@ brainApp.controller('GeneralController', ['$scope', '$http', '$sce', '$element',
 		$scope.loadSubtitles = function(id) {
 	        
 			$scope.$parent.showloading = true;
-	        $http.get("/jvideo/sublist/" + id).then(function(response) {
+	        $http.get("/sublist/" + id).then(function(response) {
 	        	
 	        	var parent = angular.element(document.querySelector('.subtitleitemsparent'));
 	        	parent.html("");

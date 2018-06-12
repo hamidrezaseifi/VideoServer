@@ -34,7 +34,6 @@ brainApp.controller('BodyController', ['$scope', '$http', '$sce', '$element', 'm
 
 	$scope.showloading = false;
 	
-	$scope.testval = ["NY", "Amsterdam", "Barcelona"];
 	for (var i = 0; i < loadUrlList.length; i++) {
 		
 		var target = angular.element(document.querySelector('#maintab' + i));

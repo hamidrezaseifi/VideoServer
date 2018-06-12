@@ -13,7 +13,7 @@ brainApp.controller('ToolsController', ['$scope', '$http', '$sce', '$element', '
         
 		
 		$scope.$parent.showloading = true;
-		$http.get("/jvideo/pathsublist").then(function(response) {
+		$http.get("/pathsublist").then(function(response) {
         	
         	var parent = angular.element(document.querySelector('.pathsubitemsparent'));
         	parent.html("");
@@ -24,9 +24,9 @@ brainApp.controller('ToolsController', ['$scope', '$http', '$sce', '$element', '
             	var item = response.data[index];
             	element += '<div class="pathsubitems" >';
             	
-            	element += item.Path + " &nbsp;&nbsp; > &nbsp;&nbsp; " + item.Suburl;
+            	element += item.path + " &nbsp;&nbsp; > &nbsp;&nbsp; " + item.suburl;
             		
-            	element += '<button type="button" class="btn btn-default btn-sm" ng-click="delPathSubtitle($event, \'' + item.Path + '\', \'' + item.Suburl + '\', ' + item.ID + ')"><span class="glyphicon glyphicon-trash"></span></button>';
+            	element += '<button type="button" class="btn btn-default btn-sm" ng-click="delPathSubtitle($event, \'' + item.path + '\', \'' + item.suburl + '\', ' + item.id + ')"><span class="glyphicon glyphicon-trash"></span></button>';
             	element += "</div>";
             	
             	

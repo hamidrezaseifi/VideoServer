@@ -1,10 +1,56 @@
-﻿<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org" ng-app="brainApp" >
-    <head>
-    
-    	
-    </head>
-    <body ng-controller="BodyController">
-       
-		<h1>Video Manager ...</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+	<title>JVideo ...</title>
+
+	<link th:href="@{/css/index.css}" rel="stylesheet" />
+
+	<link th:href="@{/angular/angular-material.min.css}" rel="stylesheet" />
+
+
+	<script th:src="@{/angular/angular.min.js}"></script>
+	<script th:src="@{/angular/angular-animate.min.js}"></script>
+	<script th:src="@{/angular/angular-aria.min.js}"></script>
+	<script th:src="@{/angular/angular-messages.min.js}"></script>
+	<script th:src="@{/angular/angular-material.min.js}"></script>
+
+  
+	<script th:src="@{/js/index.js}"></script>
+
+	<script th:src="@{/js/general.js}"></script>
+
+	<script th:src="@{/js/process.js}"></script>
+
+	<script th:src="@{/js/tools.js}"></script>
+
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+
+</head>
+
+<body ng-controller="BodyController">
+	
+	<div class="main-container">
+		<ul id="tabul" class="nav nav-tabs">
+			<li th:each="tabitem,iter : ${tabs}" th:class="${ iter.index == 0 ? 'active' : ''}">
+				<a data-toggle="tab" th:href="${'#maintab' + iter.index}" th:text="${tabitem.getName()}"></a>
+			</li>
+		</c:forEach>
+		</ul>
+		
+		<div class="tab-content">
+			<div th:each="tabitem, iter : ${tabs}" th:id="${'maintab' + iter.index}" watchtocompile 
+			th:class="${ 'tab-pane content-container fade ' + (iter.index == 0 ? 'in active' : '')}">
+			
+				<script th:inline="javascript">loadUrlList.push(/*[[${tabitem.getUrl()}]]*/);</script>
+			</div>
+			
+		</div>
+	
+	</div>
+	
+	<div id="dvloading" class="loadingover" ng-show="showloading"></div>
+	  	
+</body>
 </html>

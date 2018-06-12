@@ -23,7 +23,7 @@ brainApp.controller('ProcessController', ['$scope', '$http', '$sce', '$element',
 			}
 			$scope.intervalStop = false;
 			
-			$http.get("/jvideo/proclist").then(function(response) {
+			$http.get("/proclist").then(function(response) {
 	        	
 	        	var parent = angular.element(document.querySelector('.processitemsparent'));
 	        	parent.html("");
@@ -153,7 +153,7 @@ brainApp.controller('ProcessController', ['$scope', '$http', '$sce', '$element',
 
 	    $scope.checkProcess = function(){
 	    	
-			$http.get("/jvideo/proclist").then(function(response) {
+			$http.get("/proclist").then(function(response) {
 	        	
 	            for(index in response.data){
 	            	var item = response.data[index];
