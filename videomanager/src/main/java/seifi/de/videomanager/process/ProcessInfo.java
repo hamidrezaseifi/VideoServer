@@ -1,32 +1,72 @@
 package seifi.de.videomanager.process;
 
 public class ProcessInfo {
-	
-	public String OutputFileName;
-	public String OutputFilePath;
-	public String Base64OutputFilePath;
-	public String FolderPath;
-	public String ProcessType;
-	public String Status;
-	public String PercentString;
-	public int Percent;
-	public boolean isRunning;
-	public boolean isFinished;
-
-	public ProcessInfo(IVideoProcess proc) {
-		
-		OutputFileName = proc.getFileData().Name;
-		OutputFilePath = proc.getOutputPath();
-		Base64OutputFilePath = proc.getFileData().getBase64OutputFilePath();
-		FolderPath = proc.getFileData().FolderPath;
-		ProcessType = proc.getProcessType();
-		Status = proc.getState().name();
-		Percent = proc.getPercent();
-		PercentString = proc.getPercentString();
-
-		isRunning = proc.isRunning();
-		isFinished = proc.getState() == ProcessState.Finished;
-		
-	}
-
+  
+  private final String  outputFileName;
+  private final String  outputFilePath;
+  private final String  base64OutputFilePath;
+  private final String  folderPath;
+  private final String  processType;
+  private final String  status;
+  private final String  percentString;
+  private final int     percent;
+  private final boolean isRunning;
+  private final boolean isFinished;
+  
+  public ProcessInfo(final IVideoProcess proc) {
+    
+    this.outputFileName = proc.getFileData().getName();
+    this.outputFilePath = proc.getOutputPath();
+    this.base64OutputFilePath = proc.getFileData().getBase64OutputFilePath();
+    this.folderPath = proc.getFileData().getFolderPath();
+    this.processType = proc.getProcessType();
+    this.status = proc.getState().name();
+    this.percent = proc.getPercent();
+    this.percentString = proc.getPercentString();
+    
+    this.isRunning = proc.isRunning();
+    this.isFinished = proc.getState() == ProcessState.Finished;
+    
+  }
+  
+  public String getOutputFileName() {
+    return this.outputFileName;
+  }
+  
+  public String getOutputFilePath() {
+    return this.outputFilePath;
+  }
+  
+  public String getBase64OutputFilePath() {
+    return this.base64OutputFilePath;
+  }
+  
+  public String getFolderPath() {
+    return this.folderPath;
+  }
+  
+  public String getProcessType() {
+    return this.processType;
+  }
+  
+  public String getStatus() {
+    return this.status;
+  }
+  
+  public String getPercentString() {
+    return this.percentString;
+  }
+  
+  public int getPercent() {
+    return this.percent;
+  }
+  
+  public boolean getIsRunning() {
+    return this.isRunning;
+  }
+  
+  public boolean getIsFinished() {
+    return this.isFinished;
+  }
+  
 }

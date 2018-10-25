@@ -32,14 +32,14 @@ brainApp.controller('ProcessController', ['$scope', '$http', '$sce', '$element',
 	            for(index in response.data){
 	            	
 	            	var item = response.data[index];
-	            	element += "<div class='processitems' data-out64='" + item.Base64OutputFilePath + "'";
+	            	element += "<div class='processitems' data-out64='" + item.base64OutputFilePath + "'";
 	            	
 	            	element += " >";
-	            	element += item.OutputFileName;
-	            	element += "<span class='proctype cell'>" + item.ProcessType + "</span>";
-	            	element += "<span class='status cell'>" + item.Status + "</span>";
-	            	element += "<span class='percentproc cell'><span class='percent'>" + item.Percent + "</span><md-progress-linear md-mode='determinate' value='{{progValue[\"" + item.Base64OutputFilePath + "\"]}}' ></md-progress-linear></span>";
-            		element += "<a class='fileitembutton' href='localexplorer:" + item.FolderPath + "' target='_self'>Folder</a>";
+	            	element += item.outputFileName;
+	            	element += "<span class='proctype cell'>" + item.processType + "</span>";
+	            	element += "<span class='status cell'>" + item.status + "</span>";
+	            	element += "<span class='percentproc cell'><span class='percent'>" + item.percent + "</span><md-progress-linear md-mode='determinate' value='{{progValue[\"" + item.base64OutputFilePath + "\"]}}' ></md-progress-linear></span>";
+            		element += "<a class='fileitembutton' href='localexplorer:" + item.folderPath + "' target='_self'>Folder</a>";
 	            	if(!item.isRunning){
 	            		//element += '<a class="fileitembutton startproc" href="#" ng-click="startProc($event, \'' + item.Base64OutputFilePath + '\')">Start</a>';
 	            		
@@ -48,14 +48,14 @@ brainApp.controller('ProcessController', ['$scope', '$http', '$sce', '$element',
 	            		//element += '<a class="fileitembutton stopproc" href="#" ng-click="stopProc($event, \'' + item.Base64OutputFilePath + '\')">Stop</a>';
 	            		
 	            	}
-	            	element += '<a class="fileitembutton startproc" href="#" ng-hide="isRunning[\'' + item.Base64OutputFilePath + '\']" ng-click="startProc($event, \'' + item.Base64OutputFilePath + '\')">Start</a>';
-	            	element += '<a class="fileitembutton stopproc" href="#" ng-show="isRunning[\'' + item.Base64OutputFilePath + '\']" ng-click="stopProc($event, \'' + item.Base64OutputFilePath + '\')">Stop</a>';
-	            	element += '<a class="fileitembutton delproc" href="#" ng-hide="isRunning[\'' + item.Base64OutputFilePath + '\']" ng-click="delProc($event, \'' + item.Base64OutputFilePath + '\')">Remove</a>';
+	            	element += '<a class="fileitembutton startproc" href="#" ng-hide="isRunning[\'' + item.base64OutputFilePath + '\']" ng-click="startProc($event, \'' + item.base64OutputFilePath + '\')">Start</a>';
+	            	element += '<a class="fileitembutton stopproc" href="#" ng-show="isRunning[\'' + item.base64OutputFilePath + '\']" ng-click="stopProc($event, \'' + item.base64OutputFilePath + '\')">Stop</a>';
+	            	element += '<a class="fileitembutton delproc" href="#" ng-hide="isRunning[\'' + item.base64OutputFilePath + '\']" ng-click="delProc($event, \'' + item.base64OutputFilePath + '\')">Remove</a>';
 	            		
 	            	element += "</div>";
 	            	
-	            	$scope.progValue[item.Base64OutputFilePath] = item.Percent;
-	            	$scope.isRunning[item.Base64OutputFilePath] = item.isRunning;
+	            	$scope.progValue[item.base64OutputFilePath] = item.percent;
+	            	$scope.isRunning[item.base64OutputFilePath] = item.isRunning;
 	            }
 	            $scope.intervalStop = $interval(function() {$scope.checkProcess()}, 500);
 	            
@@ -158,13 +158,13 @@ brainApp.controller('ProcessController', ['$scope', '$http', '$sce', '$element',
 	            for(index in response.data){
 	            	var item = response.data[index];
 	            	
-   				 	var parent = angular.element(document.querySelector('.processitems[data-out64="' + item.Base64OutputFilePath + '"]'));
+   				 	var parent = angular.element(document.querySelector('.processitems[data-out64="' + item.base64OutputFilePath + '"]'));
 				 
-					$(parent).children(".status").html(item.Status);
-					$(parent).children(".percentproc").children(".percent").html(item.PercentString + " %");
-					$scope.progValue[item.Base64OutputFilePath] = item.Percent;
+					$(parent).children(".status").html(item.status);
+					$(parent).children(".percentproc").children(".percent").html(item.percentString + " %");
+					$scope.progValue[item.base64OutputFilePath] = item.percent;
 					
-					$scope.isRunning[item.Base64OutputFilePath] = item.isRunning;
+					$scope.isRunning[item.base64OutputFilePath] = item.isRunning;
 	            }
 
 	        }, function(response){

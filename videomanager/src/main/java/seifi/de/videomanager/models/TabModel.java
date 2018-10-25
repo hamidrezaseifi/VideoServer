@@ -1,63 +1,63 @@
 package seifi.de.videomanager.models;
 
-
 public class TabModel {
-  int id;
-  int index;
+  
+  int    id;
+  int    index;
   String name;
   String url;
-  int state;
-  
+  int    state;
+
   public TabModel() {
-    
+
   }
-  
-  public TabModel(int id, int index, String name, String url, int state) {
+
+  public TabModel(final int id, final int index, final String name, final String url, final int state) {
     this.id = id;
     this.index = index;
     this.name = name;
     this.url = url;
     this.state = state;
   }
-  
+
   public int getId() {
-    return id;
+    return this.id;
   }
-  
-  public void setId(int id) {
+
+  public void setId(final int id) {
     this.id = id;
   }
-  
+
   public int getIndex() {
-    return index;
+    return this.index;
   }
-  
-  public void setIndex(int index) {
+
+  public void setIndex(final int index) {
     this.index = index;
   }
-  
+
   public String getName() {
-    return name;
+    return this.name;
   }
-  
-  public void setName(String name) {
+
+  public void setName(final String name) {
     this.name = name;
   }
-  
+
   public String getUrl() {
-    return url;
+    return this.url;
   }
-  
-  public void setUrl(String url) {
+
+  public void setUrl(final String url) {
     this.url = url;
   }
-  
+
   public int getState() {
-    return state;
+    return this.state;
   }
-  
-  public void setState(int state) {
+
+  public void setState(final int state) {
     this.state = state;
   }
- 
+  
 }

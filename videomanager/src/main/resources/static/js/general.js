@@ -34,14 +34,14 @@ brainApp.controller('GeneralController', ['$scope', '$http', '$sce', '$element',
 	            		element += " ready";
 	            	}
 	            	element += "' >";
-	            	element += item.Name;
-            		element += "<a class='fileitembutton' href='localexplorer:" + item.FolderPath + "' target='_self'>Folder</a>";
+	            	element += item.name;
+            		element += "<a class='fileitembutton' href='localexplorer:" + item.folderPath + "' target='_self'>Folder</a>";
 	            	if(!item.hasSubtitle){
-	            		element += "<a class='fileitembutton findsub' href='" + item.SubtitleUrl + "' target='_blank'>Find Subtitle</a>";
-	            		element += '<a class="fileitembutton addsub" href="#" ng-click="addSubtitle($event, \'' + item.Base64SubtitlePath + '\', \'' + item.Base64Path + '\')">Add Subtitle</a>';
+	            		element += "<a class='fileitembutton findsub' href='" + item.subtitleUrl + "' target='_blank'>Find Subtitle</a>";
+	            		element += '<a class="fileitembutton addsub" href="#" ng-click="addSubtitle($event, \'' + item.base64SubtitlePath + '\', \'' + item.base64Path + '\')">Add Subtitle</a>';
 	            	}
 	            	else{
-	            		element += '<a class="fileitembutton addsubproc" href="#" ng-click="addSubtitleProcess($event, \'' + item.Base64Path + '\')">Add Subtitle Process</a>';
+	            		element += '<a class="fileitembutton addsubproc" href="#" ng-click="addSubtitleProcess($event, \'' + item.base64Path + '\')">Add Subtitle Process</a>';
 	            	}
 	            		
 	            	element += "</div>";
@@ -70,9 +70,9 @@ brainApp.controller('GeneralController', ['$scope', '$http', '$sce', '$element',
 	            	element += "<div class='fileitem'";
 	            	
 	            	element += " >";
-	            	element += item.Name;
-	            	element += "<a class='fileitembutton' href='localexplorer:" + item.FolderPath + "' target='_self'>Folder</a>";
-            		element += '<a class="fileitembutton addsubproc" href="#" ng-click="editSubtitle($event, \'' + item.Base64Path + '\')">Edit</a>';
+	            	element += item.name;
+	            	element += "<a class='fileitembutton' href='localexplorer:" + item.folderPath + "' target='_self'>Folder</a>";
+            		element += '<a class="fileitembutton addsubproc" href="#" ng-click="editSubtitle($event, \'' + item.base64Path + '\')">Edit</a>';
 	            		
 	            	element += "</div>";
 	            	

@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import seifi.de.videomanager.bl.FileDataService;
 import seifi.de.videomanager.bl.FoldersHandler;
 import seifi.de.videomanager.bl.PathSubtitlesHandler;
+import seifi.de.videomanager.bl.SettingsHandler;
 import seifi.de.videomanager.bl.TabsHandler;
 import seifi.de.videomanager.helper.FileData;
 import seifi.de.videomanager.helper.FileHelper;
@@ -39,14 +41,11 @@ import seifi.de.videomanager.process.MkvProcess;
 import seifi.de.videomanager.process.ProcessInfo;
 import seifi.de.videomanager.process.VideoProcessManager;
 
-
-
 @Controller
 public class MainController {
 
   private final Logger logger = LoggerFactory.getLogger(MainController.class);
 
-  
   final private VideoProcessManager videoProcessManager;
   
   final private TabsHandler tabsHandler;
@@ -55,263 +54,262 @@ public class MainController {
   
   final private PathSubtitlesHandler pathSubtitlesHandler;
 
+  final private SettingsHandler settingsHandler;
+  
+  final private FileDataService fileDataService;
+
   @Autowired
-  public MainController(VideoProcessManager videoProcessManager, TabsHandler tabsHandler, FoldersHandler foldersHandler,
-      PathSubtitlesHandler pathSubtitlesHandler) {
+  public MainController(final VideoProcessManager videoProcessManager, final TabsHandler tabsHandler, final FoldersHandler foldersHandler,
+      final PathSubtitlesHandler pathSubtitlesHandler, final SettingsHandler settingsHandler, final FileDataService fileDataService) {
     this.tabsHandler = tabsHandler;
     this.videoProcessManager = videoProcessManager;
     this.foldersHandler = foldersHandler;
     this.pathSubtitlesHandler = pathSubtitlesHandler;
-    
+    this.settingsHandler = settingsHandler;
+    this.fileDataService = fileDataService;
   }
   
   @GetMapping("/")
   public String index(final Model model) {
-    //logger.debug("test");
+    // logger.debug("test");
     
-    model.addAttribute("tabs", tabsHandler.listTabs());
+    model.addAttribute("tabs", this.tabsHandler.listTabs());
     return "index";
   }
-  
-  
+
   @GetMapping("/general")
-  public String showGeneralTab(final Model model){
+  public String showGeneralTab(final Model model) {
     
-    model.addAttribute("folders", foldersHandler.listFolders());
-      
-    return "general"; 
+    model.addAttribute("folders", this.foldersHandler.listFolders());
+
+    return "general";
   }
   
   @GetMapping("/process")
-  public String ProcessList(final Model model){
-         
-    return "process";     
+  public String ProcessList(final Model model) {
+
+    return "process";
   }
   
   @GetMapping("/tools")
-  public String toolsList(final Model model){
-    
-    
-    return "tools"; 
+  public String toolsList(final Model model) {
+
+    return "tools";
   }
   
   @GetMapping("/folderlist")
   @ResponseBody
-  public List<FolderModel> folderList(final Model model){
+  public List<FolderModel> folderList(final Model model) {
 
-    return foldersHandler.listFolders(); 
+    return this.foldersHandler.listFolders();
   }
   
-  @GetMapping(value="/filelist/{id}", produces={"application/json"})
+  @GetMapping(value = "/filelist/{id}", produces = {
+      "application/json" })
   @ResponseBody
-  public List<FileData> fileList(@PathVariable("id") int id){
+  public List<FileData> fileList(@PathVariable("id") final int id) {
     
-    List<FileData> files = new ArrayList<FileData>();
+    final List<FileData> files = new ArrayList<FileData>();
     
-    FolderModel folder = foldersHandler.readFolder(id);
-    if(folder != null) {
-      files.addAll(FileHelper.getAllMediaFiles(folder.getPath(), foldersHandler, pathSubtitlesHandler));
+    final FolderModel folder = this.foldersHandler.readFolder(id);
+    if (folder != null) {
+      files.addAll(FileHelper.getAllMediaFiles(folder.getPath(), this.fileDataService));
     }
-    
-        return files; 
+
+    return files;
   }
   
-  @GetMapping(value="/sublist/{id}", produces={"application/json"})
+  @GetMapping(value = "/sublist/{id}", produces = {
+      "application/json" })
   @ResponseBody
-  public List<SubtitleData> subtitlesList(@PathVariable("id") int id){
+  public List<SubtitleData> subtitlesList(@PathVariable("id") final int id) {
     
-    List<SubtitleData> files = new ArrayList<SubtitleData>();
+    final List<SubtitleData> files = new ArrayList<SubtitleData>();
     
-    FolderModel folder = foldersHandler.readFolder(id);
-    if(folder != null) {
+    final FolderModel folder = this.foldersHandler.readFolder(id);
+    if (folder != null) {
       files.addAll(FileHelper.getAllSubtitleFiles(folder.getPath()));
     }
 
-        return files; 
+    return files;
   }
 
   @RequestMapping(value = "/addsubfromzip", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, String> addSubtitleZip(@RequestParam("path64") String path64, @RequestParam("subpath64") String subpath64, 
-      @RequestParam("zipurl") String zipurl){
-    
-    
-    byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
-    String realfilePath = new String(realpathdata);
-    realpathdata = Base64.getDecoder().decode(subpath64.getBytes());
-    String realsubPath = new String(realpathdata);
-    
-    String strin64 = "p64= " + path64 + " , sp64= " + subpath64 + " , zip= " + zipurl;
-    String strin = "p= " + realfilePath + " , sp= " + realsubPath + " , zip= " + zipurl;
+  public Map<String, String> addSubtitleZip(@RequestParam("path64") final String path64, @RequestParam("subpath64") final String subpath64,
+      @RequestParam("zipurl") final String zipurl) {
 
-    boolean res = SubtitleZipfileDownloader.DownloadSrtZip(realsubPath, zipurl);
+    byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
+    final String realfilePath = new String(realpathdata);
+    realpathdata = Base64.getDecoder().decode(subpath64.getBytes());
+    final String realsubPath = new String(realpathdata);
     
-    Map<String, String> list = new HashMap<String, String>();
+    final String strin64 = "p64= " + path64 + " , sp64= " + subpath64 + " , zip= " + zipurl;
+    final String strin = "p= " + realfilePath + " , sp= " + realsubPath + " , zip= " + zipurl;
+
+    final boolean res = SubtitleZipfileDownloader.DownloadSrtZip(realsubPath, zipurl);
+    
+    final Map<String, String> list = new HashMap<String, String>();
     list.put("strin64", strin64);
     list.put("strin", strin);
     list.put("result", res ? "ok" : "error");
     
-    return list; 
+    return list;
   }
 
   @RequestMapping(value = "/addsubproc", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, String> addSubtitleProcess(@RequestParam("path64") String path64, @RequestParam("lang") String language){
-    
-    
-    byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
-    String realfilePath = new String(realpathdata);
+  public Map<String, String> addSubtitleProcess(@RequestParam("path64") final String path64, @RequestParam("lang") final String language) {
 
-    Map<String, String> list = new HashMap<String, String>();
+    final byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
+    final String realfilePath = new String(realpathdata);
+
+    final Map<String, String> list = new HashMap<String, String>();
     
-    MkvProcess proc = (MkvProcess)videoProcessManager.add(new MkvProcess(new FileData(realfilePath, foldersHandler, pathSubtitlesHandler), language));
-    if(proc != null) {
+    final MkvProcess proc = (MkvProcess) this.videoProcessManager
+        .add(new MkvProcess(this.fileDataService.createFileData(realfilePath), language));
+    if (proc != null) {
       list.put("outpath", proc.getOutputPath());
     }
-    else
-    {
+    else {
       list.put("outpath", "");
     }
     
     list.put("result", proc != null ? "ok" : "exists");
-    list.put("count", "" + videoProcessManager.size());
+    list.put("count", "" + this.videoProcessManager.size());
     
-    return list; 
+    return list;
   }
 
-  @RequestMapping(value="/proclist", produces={"application/json"})
+  @RequestMapping(value = "/proclist", produces = {
+      "application/json" })
   @ResponseBody
-  public List<ProcessInfo> processList(){
+  public List<ProcessInfo> processList() {
     
-    List<ProcessInfo> list = new ArrayList<ProcessInfo>();
+    final List<ProcessInfo> list = new ArrayList<ProcessInfo>();
     
-    for(int i=0; i<videoProcessManager.size(); i++) {
-      list.add(videoProcessManager.get(i).getInfo());
+    for (int i = 0; i < this.videoProcessManager.size(); i++) {
+      list.add(this.videoProcessManager.get(i).getInfo());
     }
-        
-        return list; 
+
+    return list;
   }
 
   @RequestMapping(value = "/changeproc", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, Object> toggleProcess(@RequestParam("path64") String path64, @RequestParam("start") int start){
-    
-    
-    byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
-    String realfilePath = new String(realpathdata);
+  public Map<String, Object> toggleProcess(@RequestParam("path64") final String path64, @RequestParam("start") final int start) {
 
-    Map<String, Object> list = new HashMap<String, Object>();
+    final byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
+    final String realfilePath = new String(realpathdata);
+
+    final Map<String, Object> list = new HashMap<String, Object>();
     
-    IVideoProcess proc = videoProcessManager.processByOutput(realfilePath);
-    if(proc != null) {
+    final IVideoProcess proc = this.videoProcessManager.processByOutput(realfilePath);
+    if (proc != null) {
       
-      if(start == 1) {
+      if (start == 1) {
         proc.start();
         list.put("act", "start");
       }
-      if(start == 2) {
+      if (start == 2) {
         proc.stop();
         list.put("act", "stop");
       }
-      if(start == 3) {
-        if(proc.isRunning())
-        {
+      if (start == 3) {
+        if (proc.isRunning()) {
           list.put("act", "running");
         }
         else {
           
-          int size = videoProcessManager.size();
-          videoProcessManager.removeByOutput(realfilePath);
-          list.put("act", size > videoProcessManager.size() ? "del" : "nodel");
+          final int size = this.videoProcessManager.size();
+          this.videoProcessManager.removeByOutput(realfilePath);
+          list.put("act", size > this.videoProcessManager.size() ? "del" : "nodel");
         }
-        
-        
+
       }
       
       try {
         Thread.sleep(500);
-      } catch (InterruptedException e) {
+      }
+      catch (final InterruptedException e) {
         
       }
       list.put("info", proc.getInfo());
 
     }
-    else
-    {
+    else {
       list.put("outpath", "");
     }
     
     list.put("found", proc != null ? "ok" : "no");
     
-    return list; 
+    return list;
   }
   
-  @RequestMapping(value="/checkproc/{out64}/{ticks}", produces={"application/json"})
+  @RequestMapping(value = "/checkproc/{out64}/{ticks}", produces = {
+      "application/json" })
   @ResponseBody
-  public Map<String, Object> checkProcess(@PathVariable("out64") String path64){
+  public Map<String, Object> checkProcess(@PathVariable("out64") final String path64) {
     
-    byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
-    String realfilePath = new String(realpathdata);
+    final byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
+    final String realfilePath = new String(realpathdata);
 
-    Map<String, Object> list = new HashMap<String, Object>();
+    final Map<String, Object> list = new HashMap<String, Object>();
     
-    IVideoProcess proc = videoProcessManager.processByOutput(realfilePath);
-    if(proc != null) {
+    final IVideoProcess proc = this.videoProcessManager.processByOutput(realfilePath);
+    if (proc != null) {
       list.put("info", proc.getInfo());
     }
-    else
-    {
+    else {
       list.put("outpath", "");
     }
     
     list.put("found", proc != null ? "ok" : "no");
     
-    return list; 
+    return list;
   }
   
   @RequestMapping(value = "/conversubtitle", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, String> convertSubtitle(@RequestParam("path64") String path64, @RequestParam("conv") String conv){
+  public Map<String, String> convertSubtitle(@RequestParam("path64") final String path64, @RequestParam("conv") final String conv) {
     
-    Map<String, String> list = new HashMap<String, String>();
+    final Map<String, String> list = new HashMap<String, String>();
     
-    //list.put("result", "ok");
+    // list.put("result", "ok");
     
-    byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
-    String realfilePath = new String(realpathdata);
+    final byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
+    final String realfilePath = new String(realpathdata);
     
-    File f = new File(realfilePath);
-    if(!f.exists()) {
+    final File f = new File(realfilePath);
+    if (!f.exists()) {
       list.put("found", "no");
       list.put("result", "Error: No File");
     }
     else {
       list.put("found", "ok");
-      if(FileData.getFileExtention(realfilePath).toLowerCase().equals("srt")) {
+      if (this.fileDataService.getFileExtention(realfilePath).toLowerCase().equals("srt")) {
         list.put("issrt", "ok");
         
         try {
           
-          Path textFile = Paths.get(realfilePath);
+          final Path textFile = Paths.get(realfilePath);
           
-          if(conv.equals("ascii")) {
+          if (conv.equals("ascii")) {
             
-            List<String> lines = Files.readAllLines(textFile, Charset.forName("windows-1256"));
+            final List<String> lines = Files.readAllLines(textFile, Charset.forName("windows-1256"));
             Files.write(textFile, lines, StandardCharsets.UTF_8);
             list.put("result", "ok");
           }
           
-          if(conv.equals("unicode")) {
+          if (conv.equals("unicode")) {
             
-            List<String> lines = Files.readAllLines(textFile, StandardCharsets.UTF_16);
+            final List<String> lines = Files.readAllLines(textFile, StandardCharsets.UTF_16);
             Files.write(textFile, lines, StandardCharsets.UTF_8);
             list.put("result", "ok");
           }
-          
 
-
-        } 
-        catch(IOException ex) {
+        }
+        catch (final IOException ex) {
           
           list.put("result", "Error: " + ex.getMessage());
         }
@@ -321,94 +319,64 @@ public class MainController {
         list.put("result", "Error: No Srt");
       }
     }
-    
-    
-    return list; 
+
+    return list;
   }
 
-  
   @RequestMapping(value = "/subtitleaddsecs", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, String> addSubtitleSeconds(@RequestParam("path64") String path64, @RequestParam("secs") int seconds){
+  public Map<String, String> addSubtitleSeconds(@RequestParam("path64") final String path64, @RequestParam("secs") final int seconds) {
     
-    Map<String, String> list = new HashMap<String, String>();
+    final Map<String, String> list = new HashMap<String, String>();
     list.put("found", "no");
     list.put("result", "Error: No File");
 
-    /*byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes());
-    String realfilePath = new String(realpathdata);
-    
-    File f = new File(realfilePath);
-    if(!f.exists()) {
-      list.put("found", "no");
-      list.put("result", "Error: No File");
-    }
-    else {
-      list.put("found", "ok");
-      if(FileData.getFileExtention(realfilePath).toLowerCase().equals("srt")) {
-        list.put("issrt", "ok");
-        
-        if(seconds == 0) {
-          list.put("result", "zero seconds");
-        }
-        else {
-          SrtReader reader = new SrtReader(realfilePath);
-          //reader.addSeconds(seconds);
-          //reader.save();
-          list.put("path", realfilePath);
-          list.put("items", reader.itemList.size() + "");
-          list.put("error", reader.lastError);
-          list.put("result", "ok");
-        }
-          
-      }
-      else {
-        list.put("issrt", "no");
-        list.put("result", "Error: No Srt");
-      }
-    }*/
-    
-    
-    return list; 
-  }
-  
+    /*
+     * byte[] realpathdata = Base64.getDecoder().decode(path64.getBytes()); String realfilePath = new String(realpathdata); File f = new
+     * File(realfilePath); if(!f.exists()) { list.put("found", "no"); list.put("result", "Error: No File"); } else { list.put("found",
+     * "ok"); if(FileData.getFileExtention(realfilePath).toLowerCase().equals("srt")) { list.put("issrt", "ok"); if(seconds == 0) {
+     * list.put("result", "zero seconds"); } else { SrtReader reader = new SrtReader(realfilePath); //reader.addSeconds(seconds);
+     * //reader.save(); list.put("path", realfilePath); list.put("items", reader.itemList.size() + ""); list.put("error", reader.lastError);
+     * list.put("result", "ok"); } } else { list.put("issrt", "no"); list.put("result", "Error: No Srt"); } }
+     */
 
-  @RequestMapping(value="/pathsublist", produces={"application/json"})
+    return list;
+  }
+
+  @RequestMapping(value = "/pathsublist", produces = {
+      "application/json" })
   @ResponseBody
-  public List<PathSubtitleModel> pathsubList(){
-      
-    List<PathSubtitleModel> res = new ArrayList<PathSubtitleModel>();
-    List<PathSubtitleModel> list = pathSubtitlesHandler.listPathSubtitles(); 
+  public List<PathSubtitleModel> pathsubList() {
+
+    final List<PathSubtitleModel> res = new ArrayList<PathSubtitleModel>();
+    final List<PathSubtitleModel> list = this.pathSubtitlesHandler.listPathSubtitles();
     res.addAll(list);
     
-    return res; 
+    return res;
   }
 
   @RequestMapping(value = "/addpathsub", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, Object> addPathSubtitle(@RequestParam("path") String path, @RequestParam("suburl") String suburl){
+  public Map<String, Object> addPathSubtitle(@RequestParam("path") final String path, @RequestParam("suburl") final String suburl) {
+
+    final boolean res = this.pathSubtitlesHandler.savePathSubtitles(new PathSubtitleModel(-1, path, suburl));
     
-    
-    boolean res = pathSubtitlesHandler.savePathSubtitles(new PathSubtitleModel(-1, path, suburl));
-    
-    Map<String, Object> list = new HashMap<String, Object>();
+    final Map<String, Object> list = new HashMap<String, Object>();
     list.put("result", res ? "ok" : "failed");
     list.put("res", res);
-    
-    
-    return list; 
+
+    return list;
   }
 
   @RequestMapping(value = "/delpathsub", method = RequestMethod.POST)
   @ResponseBody
-  public Map<String, Object> addPathSubtitle(@RequestParam("psid") int psid){
+  public Map<String, Object> addPathSubtitle(@RequestParam("psid") final int psid) {
 
-    boolean res = pathSubtitlesHandler.deletePathSubtitle(psid);
+    final boolean res = this.pathSubtitlesHandler.deletePathSubtitle(psid);
     
-    Map<String, Object> list = new HashMap<String, Object>();
+    final Map<String, Object> list = new HashMap<String, Object>();
     list.put("result", res ? "ok" : "failed");
-    
-    
-    return list; 
+
+    return list;
   }
 }

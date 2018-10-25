@@ -140,6 +140,8 @@ div.processparent
 {
 	padding: 10px;
 	background: #eeeeee;
+	height: 780px;
+    overflow-y: auto;
 }
 
 
@@ -260,4 +262,6 @@ div.pathsubitems
 div.pathsubitems button
 {
 	margin-left: 15px;
+	background-color: transparent;
+    border-color: transparent;
 }

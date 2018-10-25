@@ -1,130 +1,174 @@
 package seifi.de.videomanager.helper;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-
-import seifi.de.videomanager.bl.FoldersHandler;
-import seifi.de.videomanager.bl.PathSubtitlesHandler;
-import seifi.de.videomanager.models.PathSubtitleModel;
-
-
-
 public class FileData {
-
-	public static String OutputExtentionTeil = "_out";
-	
-	public String Path;
-	public String OutputPath;
-	public String Base64Path;
-	public String FolderPath;
-	public String SubtitlePath;
-	public String Base64SubtitlePath;
-	public String SubtitleUrl;
-	public String Name;
-	public boolean hasSubtitle;
-	public boolean isMedia;
-	public boolean isInProcess;
-	public boolean isInConvertProcess;
-	public boolean isInSubtitleProcess;
-	public boolean isConverted;
-	public boolean hasConverted;
-	
-	public String MkvMergPath;
-	
   
-  @Autowired
-  private final FoldersHandler foldersHandler;
+  public static String OutputExtentionTeil = "_out";
   
-  @Autowired
-  private final PathSubtitlesHandler pathSubtitlesHandler;
-
-	public static boolean isFileMedia(String path) {
-		List<String> mediaExtentions = Arrays.asList(new String[]{"mpg", "mp4", "mkv", "avi"});
-		String extension = getFileExtention(path);
-		
-		return mediaExtentions.contains(extension);
-	}
-	
-	public static boolean isFileSubtitle(String path) {
-		
-		return getFileExtention(path).toLowerCase().equals("srt");
-	}
-	
-	public static String getFileExtention(String path) {
-		
-		String extension = "";
-
-		int i = path.lastIndexOf('.');
-		if (i > 0) {
-		    extension = path.substring(i+1);
-		    
-		}
-
-		return extension;
-	}
-	
-	public FileData(String path, final FoldersHandler foldersHandler, final PathSubtitlesHandler pathSubtitlesHandler) {
-
-	  this.foldersHandler = foldersHandler;
-	  this.pathSubtitlesHandler = pathSubtitlesHandler;
+  private String  path;
+  private String  outputPath;
+  private String  base64Path;
+  private String  folderPath;
+  private String  subtitlePath;
+  private String  base64SubtitlePath;
+  private String  subtitleUrl;
+  private String  name;
+  private boolean hasSubtitle;
+  private boolean isMedia;
+  private boolean isInProcess;
+  private boolean isInConvertProcess;
+  private boolean isInSubtitleProcess;
+  private boolean isConverted;
+  private boolean hasConverted;
+  private String  base64OutputFilePath;
+  
+  private String mkvMergPath;
+  
+  public FileData() {
     
-	  MkvMergPath = this.getClass().getClassLoader().getResource("static/mkv/mkvmerge.exe").getPath();
-	  
-		
-		
-		File file = new File(path);
-		
-		Name = file.getName();
-		FolderPath = file.getParent();
-		Path = path;
-		isMedia = isFileMedia(path);
-		
-		hasSubtitle = false;
-		SubtitlePath = "";
-		String extension = getFileExtention(path);
-		if(extension.length() > 0) {
-			SubtitlePath = path.substring(0, path.length() - 4) + ".srt";
-			hasSubtitle = (new File(SubtitlePath)).exists();
-			
-			OutputPath = path.substring(0, path.length() - 4) + OutputExtentionTeil + "." + extension;
-		}
-		
-		isConverted = Name.indexOf(OutputExtentionTeil) > 0;
-		hasConverted = new File(OutputPath).exists();
-		
-		byte[] bytesEncoded = Base64.getEncoder().encode(Path.getBytes());
-		Base64Path = new String(bytesEncoded);
-		
-		bytesEncoded = Base64.getEncoder().encode(SubtitlePath.getBytes());
-		Base64SubtitlePath = new String(bytesEncoded);
-		
-		SubtitleUrl = "https://subscene.com/subtitles/release?q=" + Name;
-						
-		PathSubtitleModel subpath = pathSubtitlesHandler.getPathSubtitlesFromPath(FolderPath);
-		
-		if(subpath != null) {
-			SubtitleUrl = subpath.getSuburl();
-		}
-		
-		isInProcess = false;
-		isInConvertProcess = false;
-		isInSubtitleProcess = false;
-	}
-	
-	public String getBase64OutputFilePath() {
-		byte[] bytesEncoded = Base64.getEncoder().encode(OutputPath.getBytes());
-		return new String(bytesEncoded);
+  }
 
-	}
+  public static String getOutputExtentionTeil() {
+    return OutputExtentionTeil;
+  }
+  
+  public static void setOutputExtentionTeil(final String outputExtentionTeil) {
+    OutputExtentionTeil = outputExtentionTeil;
+  }
+  
+  public String getPath() {
+    return this.path;
+  }
+  
+  public void setPath(final String path) {
+    this.path = path;
+  }
+  
+  public String getOutputPath() {
+    return this.outputPath;
+  }
+  
+  public void setOutputPath(final String outputPath) {
+    this.outputPath = outputPath;
+  }
+  
+  public String getBase64Path() {
+    return this.base64Path;
+  }
+  
+  public void setBase64Path(final String base64Path) {
+    this.base64Path = base64Path;
+  }
+  
+  public String getFolderPath() {
+    return this.folderPath;
+  }
+  
+  public void setFolderPath(final String folderPath) {
+    this.folderPath = folderPath;
+  }
+  
+  public String getSubtitlePath() {
+    return this.subtitlePath;
+  }
+  
+  public void setSubtitlePath(final String subtitlePath) {
+    this.subtitlePath = subtitlePath;
+  }
+  
+  public String getBase64SubtitlePath() {
+    return this.base64SubtitlePath;
+  }
+  
+  public void setBase64SubtitlePath(final String base64SubtitlePath) {
+    this.base64SubtitlePath = base64SubtitlePath;
+  }
+  
+  public String getSubtitleUrl() {
+    return this.subtitleUrl;
+  }
+  
+  public void setSubtitleUrl(final String subtitleUrl) {
+    this.subtitleUrl = subtitleUrl;
+  }
+  
+  public String getName() {
+    return this.name;
+  }
+  
+  public void setName(final String name) {
+    this.name = name;
+  }
+  
+  public boolean getHasSubtitle() {
+    return this.hasSubtitle;
+  }
+  
+  public void setHasSubtitle(final boolean hasSubtitle) {
+    this.hasSubtitle = hasSubtitle;
+  }
+  
+  public boolean getIsMedia() {
+    return this.isMedia;
+  }
+  
+  public void setIsMedia(final boolean isMedia) {
+    this.isMedia = isMedia;
+  }
+  
+  public boolean getIsInProcess() {
+    return this.isInProcess;
+  }
+  
+  public void setIsInProcess(final boolean isInProcess) {
+    this.isInProcess = isInProcess;
+  }
+  
+  public boolean getIsInConvertProcess() {
+    return this.isInConvertProcess;
+  }
+  
+  public void setIsInConvertProcess(final boolean isInConvertProcess) {
+    this.isInConvertProcess = isInConvertProcess;
+  }
+  
+  public boolean getIsInSubtitleProcess() {
+    return this.isInSubtitleProcess;
+  }
+  
+  public void setIsInSubtitleProcess(final boolean isInSubtitleProcess) {
+    this.isInSubtitleProcess = isInSubtitleProcess;
+  }
+  
+  public boolean getIsConverted() {
+    return this.isConverted;
+  }
+  
+  public void setIsConverted(final boolean isConverted) {
+    this.isConverted = isConverted;
+  }
+  
+  public boolean getHasConverted() {
+    return this.hasConverted;
+  }
+  
+  public void setHasConverted(final boolean hasConverted) {
+    this.hasConverted = hasConverted;
+  }
+  
+  public String getMkvMergPath() {
+    return this.mkvMergPath;
+  }
+  
+  public void setMkvMergPath(final String mkvMergPath) {
+    this.mkvMergPath = mkvMergPath;
+  }
+  
+  public String getBase64OutputFilePath() {
+    return this.base64OutputFilePath;
+  }
+  
+  public void setBase64OutputFilePath(final String base64OutputFilePath) {
+    this.base64OutputFilePath = base64OutputFilePath;
+  }
+  
 }
